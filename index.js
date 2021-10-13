@@ -20,9 +20,10 @@ app.use(express.static('public'));
 app.get('/', function(req, res) {
     res.render('index', { 
         settings: settingsBill.getSettings(),
-        totals: settingsBill.totals()
-    });
-    
+        totals: settingsBill.totals(),
+        warningLevel: settingsBill.hasReachedWarningLevel(),
+        criticalLevel: settingsBill.hasReachedCriticalLevel()
+    }); 
 });
 
 app.post('/settings', function (req, res) {
@@ -34,6 +35,7 @@ app.post('/settings', function (req, res) {
         warningLevel: req.body.warningLevel,
         criticalLevel: req.body.criticalLevel
     })
+    
     res.redirect('/');
 });
 
@@ -43,8 +45,10 @@ app.post('/action', function (req, res) {
 });
 
 app.get('/actions', function (req, res) {
-    res.render('actions', {actions: settingsBill.actions() 
-    
+
+    res.render('actions', {actions: settingsBill.actions()
+     
+        
     });
 });
 
@@ -57,6 +61,5 @@ app.get('/actions/:actionType', function (req, res) {
 const PORT = process.env.PORT || 3014
 
 app.listen(PORT, function () {
-console.log("Running at port:" , PORT)
-
+console.log(`Running at port: ${PORT}`)
 });
